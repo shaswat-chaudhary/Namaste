@@ -60,7 +60,7 @@ const login = async (req, res, next) => {
         }
 
         if (!user?.verifed) {
-            next("Please verify your email address");
+            next("User email is not verified. Check your email account and verify your email");
             return;
         }
 
@@ -68,7 +68,7 @@ const login = async (req, res, next) => {
         const isPasswordCorrect = await compareString(password, user?.password);
 
         if (!isPasswordCorrect) {
-            next("Invaild email or password");
+            next("Invaild password");
             return;
         }
         user.password = undefined;
