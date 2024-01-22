@@ -75,6 +75,8 @@ const login = async (req, res, next) => {
 
         const token = createJWT(user?._id);
 
+        console.log(token, 'token') ;
+
         res.status(201).json({
             success: true,
             message: "Login Successfully",

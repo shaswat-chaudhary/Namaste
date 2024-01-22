@@ -96,7 +96,7 @@ const getPost = async (req, res, next) => {
 
         const post = await Post.findById(id).populate({
             path: "userId",
-            select: "firstName lastName location profileUrl password",
+            select: "firstName lastName location profileUrl -password",
         });
 
         res.status(200).json({
@@ -114,12 +114,14 @@ const getPost = async (req, res, next) => {
 const getUserPost = async (req, res, next) => {
 
     try {
-        const { userId } = req.body.user;
+        const { id } = req.params;
 
-        const posts = await Post.find({ userId }).populate({
-            path: "userId",
-            select: "firstName lastName location profileUrl password",
-        }).sort({ _id: -1 });
+        const posts = await Post.find({ userId: id })
+            .populate({
+                path: "userId",
+                select: "firstName lastName location profileUrl password",
+            })
+            .sort({ _id: -1 });
 
         res.status(200).json({
             success: true,

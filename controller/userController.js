@@ -95,7 +95,8 @@ const getUser = async (req, res, next) => {
             return res.status(200).send({ message: "User does not exist", success: false });
         }
         user.password = undefined;
-        res.status(200).send({ user: user, success: true });
+
+        res.status(200).json({ user: user, success: true });
 
     } catch (error) {
         console.log(error);
@@ -119,7 +120,7 @@ const updateUser = async (req, res, next) => {
 
         const user = await Users.findByIdAndUpdate(userId, updateUser, { new: true });
 
-        await user.populate({ path: "friends", select: "password" });
+        await user.populate({ path: "friends", select: "-password" });
         const token = createJWT(user?._id);
 
         user.password = undefined;
@@ -181,6 +182,7 @@ const requestFriend = async (req, res, next) => {
         res.status(500).json({ message: "Internal server error", success: false });
     }
 }
+
 
 const getFriendRequest = async (req, res, next) => {
 
@@ -311,28 +313,6 @@ const suggestFriends = async (req, res, next) => {
 }
 
 
-const profileViews = async (req, res, next) => {
-    try {
-
-        const { userId } = req.body.user;
-
-        const { id } = req.params;
-
-        const user = await Users.findById(id ?? userId);
-
-        user.views.push(userId);
-
-        await user.save();
-
-        res.status(200).json({ success: true, message: "Profile viewed successfully" });
-
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Internal server error", success: false });
-    }
-}
-
-
 const searchUsers = async (req, res, next) => {
 
     try {
@@ -346,7 +326,7 @@ const searchUsers = async (req, res, next) => {
                 { firstName: { $regex: search, $options: "i" } },
                 { lastName: { $regex: search, $options: "i" } },
             ],
-        }).select("firstName lastName profileUrl profession");
+        }).select("firstName lastName profileUrl");
 
         res.status(200).json({ success: true, users });
 
@@ -358,7 +338,4 @@ const searchUsers = async (req, res, next) => {
 
 
 
-
-
-
-module.exports = { verifyEmail, compareString, getUser, updateUser, requestFriend, getFriendRequest, acceptFriendRequest, rejectFriendRequest, suggestFriends, profileViews, searchUsers };
+module.exports = { verifyEmail, compareString, getUser, updateUser, suggestFriends, searchUsers, requestFriend, getFriendRequest, acceptFriendRequest, rejectFriendRequest };

@@ -1,5 +1,6 @@
-const mongoose = require('mongoose'); // Erase if already required
+const mongoose = require('mongoose'); 
 
+const Schema = mongoose.Schema;
 // Declare the Schema of the Mongo model
 const userSchema = new mongoose.Schema({
     firstName: {
@@ -29,13 +30,7 @@ const userSchema = new mongoose.Schema({
     profession: {
         type: String,
     },
-    friends: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Users",
-    }],
-    views: [{
-        type: String,
-    }],
+    friends: [{ type: Schema.Types.ObjectId, ref: "Users" }],
     verifed: {
         type: Boolean,
         default: false,
