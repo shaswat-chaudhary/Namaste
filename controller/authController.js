@@ -1,6 +1,6 @@
 const Users = require('../models/userModel');
-const sendVerification = require('../utils/emailSend');
 const { hashString, createJWT, compareString } = require('../utils/index');
+const sendVerification = require('../utils/emailSend');
 
 const register = async (req, res, next) => {
 
@@ -28,9 +28,15 @@ const register = async (req, res, next) => {
       password: hashedPassword,
     });
 
-    //send email verification to user
+    return res.status(201).json({
+      success: true,
+      message: "User Created Successfully",
+      user,
+    
+    })
+
    
-    sendVerification(user, res);
+    //sendVerification(user, res);
     
 
   } catch (error) {
@@ -59,10 +65,10 @@ const login = async (req, res, next) => {
             return;
         }
 
-        if (!user?.verifed) {
-            next("User email is not verified. Check your email account and verify your email");
-            return;
-        }
+        // if (!user?.verifed) {
+        //     next("User email is not verified. Check your email account and verify your email");
+        //     return;
+        // }
 
         //compare password
         const isPasswordCorrect = await compareString(password, user?.password);

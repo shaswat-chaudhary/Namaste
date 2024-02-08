@@ -31,10 +31,10 @@ const userSchema = new mongoose.Schema({
         type: String,
     },
     friends: [{ type: Schema.Types.ObjectId, ref: "Users" }],
-    verifed: {
-        type: Boolean,
-        default: false,
-    },
+    // verifed: {
+    //     type: Boolean,
+    //     default: false,
+    // },
 },
     { timestamps: true }
 );
